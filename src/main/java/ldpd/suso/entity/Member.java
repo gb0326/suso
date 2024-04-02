@@ -1,6 +1,7 @@
 package ldpd.suso.entity;
 
 import jakarta.persistence.*;
+import ldpd.suso.security.MemberRole;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 

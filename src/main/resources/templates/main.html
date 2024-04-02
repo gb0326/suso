@@ -10,6 +10,7 @@
 
 <!-- 로그인 상태인 경우: 로그아웃 링크만 보이게 함 -->
 <a sec:authorize="isAuthenticated()" th:href="@{/logout}">로그아웃</a>
+<a sec:authorize="isAuthenticated()" th:href="@{/user/mypage}">마이페이지</a>
     <h1>메인 페이지입니다.</h1>
 </body>
 </html>

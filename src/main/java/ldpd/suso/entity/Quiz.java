@@ -11,7 +11,11 @@ public class Quiz {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer quiz_id;
 
-    private String answer;
+    private String answer;  //퀴즈의 답
 
     private String description; //설명
+
+    private String filename;
+
+    private String filepath;
 }
