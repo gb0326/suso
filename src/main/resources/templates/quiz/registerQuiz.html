@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>수어 퀴즈 등록</title>
+</head>
+
+<style>
+
+    .layout {
+        width : 500px;
+        margin : 0 auto;
+        margin-top : 40px;
+    }
+
+    .layout input {
+        width : 100%;
+        box-sizing : border-box
+    }
+
+    .layout textarea {
+        width : 100%;
+        margin-top : 10px;
+        min-height : 300px;
+    }
+
+</style>
+
+<body>
+<div class="layout">
+    <form th:action="@{/admin/quiz}" method="post" enctype="multipart/form-data">
+        <input name="answer" type="text" placeholder="퀴즈 정답을 입력하세요">
+        <textarea name="description"></textarea>
+        <input type="file" name="file" accept="video/*">
+        <button type="submit">작성</button>
+    </form>
+</div>
+</body>
+</html>
