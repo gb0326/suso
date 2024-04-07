@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8">
+  <title>퀴즈</title>
+</head>
+<body>
+<h1 th:text ="${quiz.quiz_id}"></h1>
+<p th:text ="${quiz.sign.sign_desc}"></p>
+<video muted autoplay loop>
+  <source th:src="@{${quiz.sign.filepath}}" type="video/mp4">
+</video>
+
+<h2>선택지 중 하나를 선택하세요:</h2>
+<form>
+  <input type="radio" id="choice1" name="choice" value="choice1">
+  <label for="choice1">선택지 1</label><br>
+
+  <input type="radio" id="choice2" name="choice" value="choice2">
+  <label for="choice2">선택지 2</label><br>
+
+  <input type="radio" id="choice3" name="choice" value="choice3">
+  <label for="choice3">선택지 3</label><br>
+
+  <input type="radio" id="choice4" name="choice" value="choice4">
+  <label for="choice4">선택지 4</label><br><br>
+
+  <input type="submit" value="선택 완료">
+</form>
+
+</hr>
+
+</body>
+</html>

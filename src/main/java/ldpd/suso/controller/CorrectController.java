@@ -5,5 +5,5 @@ import org.springframework.stereotype.Controller;
 
 @Controller
 @RequiredArgsConstructor
-public class AnswerController {
+public class CorrectController {
 }

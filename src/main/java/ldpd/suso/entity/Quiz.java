@@ -2,20 +2,20 @@ package ldpd.suso.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Data
+@NoArgsConstructor
 public class Quiz {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer quiz_id;
 
-    private String answer;  //퀴즈의 답
+    @OneToOne
+    @JoinColumn(name = "sign_id")
+    private Sign sign;
 
-    private String description; //설명
-
-    private String filename;
-
-    private String filepath;
+    public Quiz(Sign sign) { this.sign = sign; }
 }

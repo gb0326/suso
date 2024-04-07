@@ -10,31 +10,29 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 @Controller
 @RequiredArgsConstructor
 public class QuizController {
 
-    QuizService quizService;
+    private final QuizService quizService;
 
-    @GetMapping("/admin/quiz")
-    public String registerQuiz(){
-        return "quiz/registerQuiz";
+    @GetMapping("/quiz/list")
+    public String quizList(Model model) {
+
+        List<Quiz> quiz = null;
+        quiz = quizService.quizList();
+        model.addAttribute("list", quiz);
+
+        return "quiz/quiz_list";
     }
 
-    @PostMapping("/admin/quiz")
-    public String registerQuiz(Quiz quiz, Model model, MultipartFile file) throws Exception {
+    @GetMapping("/quiz")
+    public String quizDetail(Model model, Integer id){
 
-        final long MAX_VIDEO_LENGTH = 100 * 1024 * 1024;
+        model.addAttribute("quiz", quizService.quizDetail(id));
+        return "quiz/quiz_detail";
 
-        if(file.getSize() > MAX_VIDEO_LENGTH) {
-            throw new IllegalArgumentException("업로드된 영상의 길이가 너무 깁니다.");
-        }
-
-        quizService.register(quiz, file);
-
-        model.addAttribute("message", "퀴즈 등록이 완료됐습니다.");
-        model.addAttribute("searchUrl", "/home");
-
-        return "message";
     }
 }

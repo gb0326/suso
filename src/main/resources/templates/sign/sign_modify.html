@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8">
+  <title>수어 수정페이지</title>
+</head>
+
+<style>
+
+    .layout {
+        width : 500px;
+        margin : 0 auto;
+        margin-top : 40px;
+    }
+
+    .layout input {
+        width : 100%;
+        box-sizing : border-box
+    }
+
+    .layout textarea {
+        width : 100%;
+        margin-top : 10px;
+        min-height : 300px;
+    }
+
+</style>
+
+<body>
+<div class="layout">
+  <form sec:authorize="hasRole('ADMIN')" th:action="@{/sign/update/{id}(id = ${sign.id})}" method="post" enctype="multipart/form-data">
+    <input name="title" type="text" th:value="${sign.title}">
+    <textarea name="sign_desc" th:value="${sign.sign_desc}"></textarea>
+    <input type="file" name="file" accept="video/*">
+    <button type="submit">수어 사전 수정</button>
+  </form>
+</div>
+</body>
+</html>
