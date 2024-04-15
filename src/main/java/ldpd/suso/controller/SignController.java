@@ -55,8 +55,8 @@ public class SignController {
 
     @GetMapping("/sign/list")
     public String signList(Model model,
-                            @PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
-                            String searchKeyword) {   //0페이지부터 시작하고 글은 10개씩, 내림차순으로 페이지 보여주기
+                           @PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
+                           String searchKeyword) {   //0페이지부터 시작하고 글은 10개씩, 내림차순으로 페이지 보여주기
 
         Page<Sign> list = null;
 
@@ -114,7 +114,7 @@ public class SignController {
     }
 
     @PostMapping("/sign/update/{id}")
-    public String boardUpdate(@PathVariable("id") Integer id, Sign sign, Model model, MultipartFile file) throws Exception{
+    public String signUpdate(@PathVariable("id") Integer id, Sign sign, Model model, MultipartFile file) throws Exception{
 
         Sign signTemp = signService.signDetail(id);   //기존에 담긴 board 데이터가 boardTemp로 들어옴
 

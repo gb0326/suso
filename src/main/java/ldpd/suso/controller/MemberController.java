@@ -46,19 +46,42 @@ public class MemberController {
             return "member/signup_form";
         }
 
+//        try {
+//            memberService.create(memberCreateForm.getUsername(),
+//                    memberCreateForm.getName(), memberCreateForm.getPassword1());
+//        }catch(DataIntegrityViolationException e) {
+//            e.printStackTrace();
+//            bindingResult.reject("signupFailed", "이미 등록된 사용자입니다.");
+//            return "member/signup_form";
+//        }catch(Exception e) {
+//            e.printStackTrace();
+//            bindingResult.reject("signupFailed", e.getMessage());
+//            return "member/signup_form";
+//        }
+
         try {
+            // 회원 가입 전 중복 검사
+            Optional<Member> existingMember = memberRepository.findByusername(memberCreateForm.getUsername());
+            if (existingMember.isPresent()) {
+                bindingResult.reject("signupFailed", "이미 등록된 사용자 아이디입니다.");
+                return "member/signup_form";
+            }
+
+            existingMember = memberRepository.findByname(memberCreateForm.getName());
+            if (existingMember.isPresent()) {
+                bindingResult.reject("signupFailed", "이미 등록된 사용자 이름입니다.");
+                return "member/signup_form";
+            }
+
+            // 중복이 없을 경우 회원 가입 진행
             memberService.create(memberCreateForm.getUsername(),
-                    memberCreateForm.getName(), memberCreateForm.getPassword1());
-        }catch(DataIntegrityViolationException e) {
+                    memberCreateForm.getName(),
+                    memberCreateForm.getPassword1());
+        } catch(Exception e) {
             e.printStackTrace();
-            bindingResult.reject("signupFailed", "이미 등록된 사용자입니다.");
-            return "member/signup_form";
-        }catch(Exception e) {
-            e.printStackTrace();
-            bindingResult.reject("signupFailed", e.getMessage());
+            bindingResult.reject("signupFailed", "회원 가입에 실패하였습니다.");
             return "member/signup_form";
         }
-
         return "main";
     }
 

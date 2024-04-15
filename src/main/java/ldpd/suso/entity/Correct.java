@@ -19,23 +19,25 @@ public class Correct {
     private boolean cor;    //맞혔는지 여부
 
     @ManyToOne
+    @JoinColumn(name = "quiz_id")
     private Quiz quiz;
 
-    private Integer quiz_id;
+    //private Integer quiz_id;
 
     @ManyToOne  //사용자 한명이 답 여러개 가능
+    @JoinColumn(name = "member_id")
     private Member member;
 
-    private Integer member_id;
+    //private Integer member_id;
 
     private String mem_ans;
 
     @CreationTimestamp
     private Timestamp createdAt;
 
-    public Correct(Integer quiz_id, Integer member_id){
-        this.quiz_id = quiz_id;
-        this.member_id = member_id;
+    public Correct(Quiz quiz, Member member){
+        this.quiz = quiz;
+        this.member = member;
     }
 
 }
