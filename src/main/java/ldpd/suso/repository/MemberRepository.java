@@ -8,6 +8,6 @@ import java.util.Optional;
 
 @Repository
 public interface MemberRepository extends JpaRepository<Member, Integer> {
-    Optional<Member> findByusername(String username); //로그인 시 넘어온 사용자id와 siteuser엔티티에 있는 id와 비교해야 하므로 작성
-    Optional<Member> findByname(String name);
+    Member findByusername(String username); //로그인 시 넘어온 사용자id와 siteuser엔티티에 있는 id와 비교해야 하므로 작성
+    Member findByname(String name);
 }

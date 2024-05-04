@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" >
+<div class="container my-3">
+  <div class="my-3 border-bottom">
+    <div>
+      <h4>아이디 및 이름 수정</h4>
+    </div>
+  </div>
+  <form th:action="@{/user/update/name}" method="post">
+    <div class="mb-3">
+      <label for="newEmail">새 이메일:</label>
+      <input type="email" id="newEmail" name="newEmail" required>
+      <button type="submit">수정</button>
+    </div>
+  </form>
+</div>
+</html>

@@ -21,6 +21,8 @@ public class Member {
 
     private String name;
 
+    private String email;
+
     @CreationTimestamp
     private Timestamp createdAt;
 

@@ -24,6 +24,11 @@
             <label for="name" class="form-label">이름</label>
             <input type="text" id="name" th:field="*{name}" class="form-control">
         </div>
+        <div class="mb-3">
+            <label for="email" class="form-label">이메일</label>
+            <input type="email" id="email" th:field="*{email}" class="form-control">
+        </div>
+
         <button type="submit" class="btn btn-primary">회원가입</button>
     </form>
 </div>

@@ -17,4 +17,7 @@ public class MemberCreateForm {
 
     @NotEmpty(message = "이름은 필수항목입니다.")
     private String name;
+
+    @NotEmpty(message = "이메일은 필수항목입니다.")
+    private String email;
 }
