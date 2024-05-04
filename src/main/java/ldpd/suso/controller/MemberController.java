@@ -2,32 +2,23 @@ package ldpd.suso.controller;
 
 import jakarta.servlet.http.HttpSession;
 import ldpd.suso.entity.Member;
-import ldpd.suso.entity.Sign;
 import ldpd.suso.repository.MemberRepository;
 import ldpd.suso.security.MemberCreateForm;
 import ldpd.suso.security.MemberSecurityService;
 import ldpd.suso.service.MemberService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import jakarta.validation.Valid;
 
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import java.security.Principal;
-import java.util.Optional;
 
 
 @RequiredArgsConstructor
@@ -109,7 +100,7 @@ public class MemberController {
 
         if (memberRepository != null) {
             Member optionalMember = memberRepository.findByusername(username);
-            if (optionalMember!=null) {
+            if (optionalMember!=null && optionalMember.getUsername()!=null) {
                 Member member = optionalMember;
                 model.addAttribute("member", member);
             } else {
@@ -125,25 +116,43 @@ public class MemberController {
     @GetMapping("/user/update/username")
     public String id_Update(Model model) {
 
-        return "member/update_id";
+        return "member/update_username";
     }
 
     @PostMapping("/user/update/username")
-    public String updateUsername(@RequestParam("newUsername") String newUsername, Authentication authentication) {
-        // 현재 인증된 사용자의 정보 가져오기
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        // 현재 사용자의 아이디 가져오기
-        String currentUsername = userDetails.getUsername();
+    public String updateUsername(@RequestParam("newUsername") String newUsername, Authentication authentication, Model model) {
 
-        // 아이디 변경 로직
-        memberService.updateUsername(currentUsername, newUsername);
+        try {
+            //아아디 수정 전 중복 검사
+            Member existingMember = memberRepository.findByusername(newUsername);
+            if (existingMember != null && existingMember.getUsername() != null) {
+                model.addAttribute("message", "이미 사용중인 아이디입니다.");
+                model.addAttribute("searchUrl", "/user/mypage");
+                return "message";
+            }
 
-        // 세션 정보 업데이트
-        userDetails = memberSecurityService.loadUserByUsername(newUsername);
-        UsernamePasswordAuthenticationToken newAuthentication = new UsernamePasswordAuthenticationToken(userDetails, userDetails.getPassword(), userDetails.getAuthorities());
-        SecurityContextHolder.getContext().setAuthentication(newAuthentication);
+            // 중복이 없을 경우 회원 가입 진행
+            // 현재 인증된 사용자의 정보 가져오기
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            // 현재 사용자의 아이디 가져오기
+            String currentUsername = userDetails.getUsername();
 
-        return "redirect:/user/mypage";
+            // 아이디 변경 로직
+            memberService.updateUsername(currentUsername, newUsername);
+
+            // 세션 정보 업데이트
+            userDetails = memberSecurityService.loadUserByUsername(newUsername);
+            UsernamePasswordAuthenticationToken newAuthentication = new UsernamePasswordAuthenticationToken(userDetails, userDetails.getPassword(), userDetails.getAuthorities());
+            SecurityContextHolder.getContext().setAuthentication(newAuthentication);
+
+        } catch(Exception e) {
+            e.printStackTrace();
+            model.addAttribute("message", "아이디 변경에 실패했습니다.");
+        }
+
+        model.addAttribute("message", "아이디 변경에 성공했습니다.");
+        model.addAttribute("searchUrl", "/user/mypage");
+        return "message";
     }
 
     @GetMapping("/user/update/email")
@@ -153,16 +162,33 @@ public class MemberController {
     }
 
     @PostMapping("/user/update/email")
-    public String updateEmail(@RequestParam("newEmail") String newEmail, Authentication authentication) {
-        // 현재 인증된 사용자의 정보 가져오기
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        // 현재 사용자의 아이디 가져오기
-        String currentUsername = userDetails.getUsername();
+    public String updateEmail(@RequestParam("newEmail") String newEmail, Authentication authentication, Model model) {
 
-        // 이메일 변경 로직
-        memberService.updateEmail(currentUsername, newEmail);
+        try {
+            // 이메일 수정 전 중복 검사
+            Member existingMember = memberRepository.findByEmail(newEmail);
+            if (existingMember != null && existingMember.getEmail().equals(newEmail)) {
+                model.addAttribute("message", "이미 사용중인 이메일입니다.");
+                model.addAttribute("searchUrl", "/user/mypage");
+                return "message";
+            }
 
-        return "redirect:/user/mypage";
+            // 현재 인증된 사용자의 정보 가져오기
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            // 현재 사용자의 아이디 가져오기
+            String currentUsername = userDetails.getUsername();
+
+            // 이메일 변경 로직
+            memberService.updateEmail(currentUsername, newEmail);
+
+        } catch(Exception e) {
+            e.printStackTrace();
+            model.addAttribute("message", "이메일 변경에 실패했습니다.");
+        }
+
+        model.addAttribute("message", "이메일 변경에 성공했습니다.");
+        model.addAttribute("searchUrl", "/user/mypage");
+        return "message";
     }
 
     @GetMapping("/user/update/name")
@@ -172,16 +198,33 @@ public class MemberController {
     }
 
     @PostMapping("/user/update/name")
-    public String updateName(@RequestParam("newName") String newName, Authentication authentication) {
-        // 현재 인증된 사용자의 정보 가져오기
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        // 현재 사용자의 아이디 가져오기
-        String currentUsername = userDetails.getUsername();
+    public String updateName(@RequestParam("newName") String newName, Authentication authentication, Model model) {
 
-        // 이름 변경 로직
-        memberService.updateName(currentUsername, newName);
+        try {
+            // 이름 수정 전 중복 검사
+            Member existingMember = memberRepository.findByname(newName);
+            if (existingMember != null && existingMember.getName() != null) {
+                model.addAttribute("message", "이미 사용중인 이름입니다.");
+                model.addAttribute("searchUrl", "/user/mypage");
+                return "message";
+            }
 
-        return "redirect:/user/mypage";
+            // 현재 인증된 사용자의 정보 가져오기
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            // 현재 사용자의 아이디 가져오기
+            String currentUsername = userDetails.getUsername();
+
+            // 이메일 변경 로직
+            memberService.updateName(currentUsername, newName);
+
+        } catch(Exception e) {
+            e.printStackTrace();
+            model.addAttribute("message", "이름 변경에 실패하였습니다.");
+        }
+
+        model.addAttribute("message", "이름 변경에 성공했습니다.");
+        model.addAttribute("searchUrl", "/user/mypage");
+        return "message";
     }
 
     @GetMapping("/user/update/password")
@@ -191,19 +234,29 @@ public class MemberController {
     }
 
     @PostMapping("/user/update/password")
-    public String updatePassword(@RequestParam("currentPassword") String currentPassword,
-                                 @RequestParam("newPassword") String newPassword,
-                                 Authentication authentication) {
+    public String updatePassword(@RequestParam("currentPassword") @Valid String currentPassword,
+                                 @RequestParam("newPassword1") @Valid String newPassword1,
+                                 @RequestParam("newPassword2") @Valid String newPassword2,
+                                 Authentication authentication, Model model) {
         // 현재 인증된 사용자의 정보 가져오기
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         // 현재 사용자의 아이디 가져오기
         String currentUsername = userDetails.getUsername();
 
+        if (!newPassword1.equals(newPassword2)) {
+            model.addAttribute("message", "새로운 비밀번호가 일치하지 않습니다.");
+            model.addAttribute("searchUrl", "/user/mypage");
+            return "message";
+        }
         // 비밀번호 변경 로직
-        memberService.updatePassword(currentUsername, currentPassword, newPassword);
+        int result = memberService.updatePassword(currentUsername, currentPassword, newPassword1);
+        if(result==-1)
+            model.addAttribute("message", "현재 비밀번호가 틀렸습니다.");
+        else
+            model.addAttribute("message", "비밀번호 변경이 완료됐습니다.");
 
         // 세션 정보 업데이트 (비밀번호 변경 시 세션 갱신은 필요하지 않을 수도 있음)
-
-        return "redirect:/user/mypage";
+        model.addAttribute("searchUrl", "/user/mypage");
+        return "message";
     }
 }

@@ -3,14 +3,14 @@ package ldpd.suso.service;
 
 import ldpd.suso.entity.Member;
 import ldpd.suso.repository.MemberRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.util.Optional;
-
 
 @Service
+@Slf4j
 public class MemberService {
     @Autowired
     private MemberRepository memberRepository;
@@ -55,7 +55,7 @@ public class MemberService {
         }
     }
 
-    public void updatePassword(String username, String currentPassword, String newPassword) {
+    public int updatePassword(String username, String currentPassword, String newPassword) {
         Member member = memberRepository.findByusername(username);
         if (member != null) {
             // 비밀번호 변경 로직 추가
@@ -63,8 +63,11 @@ public class MemberService {
             if (passwordEncoder.matches(currentPassword, member.getPassword())) {
                 member.setPassword(passwordEncoder.encode(newPassword));
                 memberRepository.save(member);
+                return 1;
             }
+
         }
+        return -1;
     }
 
 }

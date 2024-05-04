@@ -1,6 +1,5 @@
 package ldpd.suso.service;
 
-import ldpd.suso.entity.Quiz;
 import ldpd.suso.entity.Sign;
 import ldpd.suso.repository.SignRepository;
 import lombok.extern.slf4j.Slf4j;
