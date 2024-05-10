@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:th="http://www.thymeleaf.org" >
+<head>
+  <meta charset="UTF-8">
+  <title>수어 사전 리스트</title>
+</head>
+<style>
+  .layout {
+      width : 500px;
+      margin : 0 auto;
+      margin-top : 40px;
+  }
+</style>
+<body>
+
+<a sec:authorize="hasRole('ADMIN')" href="/admin/sign">수어 사전 등록</a>
+
+<!-- 로그아웃 상태인 경우: 로그인과 회원가입 링크만 보이게 함 -->
+<a sec:authorize="isAnonymous()"  th:href="@{/login}">로그인</a>
+<a sec:authorize="isAnonymous()" th:href="@{/signup}">회원가입</a>
+
+<!-- 로그인 상태인 경우: 로그아웃 링크만 보이게 함 -->
+<a sec:authorize="isAuthenticated()" th:href="@{/logout}">로그아웃</a>
+
+<div class="layout">
+  <table>
+    <thead>
+    <tr>
+      <th>글번호</th>
+      <th>수어</th>
+    </tr>
+    </thead>
+    <tbody>
+
+    <tr th:each="sign : ${list}">
+
+      <td th:text="${sign.id}"></td>
+      <td>
+        <a th:text="${sign.title}" th:href="@{/sign(id=${sign.id})}"></a>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+
+  <br>
+  <th:block th:if="${page != 0 }" th:each="page : ${#numbers.sequence(startPage, endPage)}">
+    <a th:if="${page != nowPage}" th:href="@{/sign/list(page = ${page -1}, searchKeyword = ${param.searchKeyword})}"
+       th:text="${page}"></a>
+    <strong th:if="${page == nowPage}" th:text="${page}" style="color : red"></strong>
+  </th:block>
+  <form th:action="@{/sign/list}" method="get">
+    <input type="text" name="searchKeyword">
+    <button type="submit">수어 검색</button>
+  </form>
+</div>
+
+</body>
+</html>

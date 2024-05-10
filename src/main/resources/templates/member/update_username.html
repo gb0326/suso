@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" >
+<div class="container my-3">
+  <div class="my-3 border-bottom">
+    <div>
+      <h4>아이디 수정</h4>
+    </div>
+  </div>
+  <form th:action="@{/user/update/username}" method="post">
+    <label for="newUsername">새 아이디:</label>
+    <input type="text" id="newUsername" name="newUsername" required>
+    <button type="submit">수정</button>
+  </form>
+</div>
+</html>

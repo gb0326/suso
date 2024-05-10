@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <meta charset="UTF-8">
+    <title>수화로 소통하는 수소</title>
+</head>
+<body>
+<a sec:authorize="isAnonymous()"  th:href="@{/login}">로그인</a>
+<a sec:authorize="isAnonymous()" th:href="@{/signup}">회원가입</a>
+
+<!-- 로그인 상태인 경우: 로그아웃 링크만 보이게 함 -->
+<a sec:authorize="isAuthenticated()" th:href="@{/logout}">로그아웃</a>
+<a sec:authorize="isAuthenticated()" th:href="@{/user/mypage}">마이페이지</a>
+<a sec:authorize="isAuthenticated()" th:href="@{/sign/list}">수어 사전 보기</a>
+<a sec:authorize="isAuthenticated()" th:href="@{/quiz/list}">수어 퀴즈 풀기</a>
+
+    <h1>미완성 메인 페이지</h1>
+</body>
+</html>
