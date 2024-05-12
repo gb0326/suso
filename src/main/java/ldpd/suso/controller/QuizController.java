@@ -45,7 +45,7 @@ public class QuizController {
     public String quizDetail(Model model, @RequestParam Integer id) {
 
         model.addAttribute("quiz", quizService.quizDetail(id));
-        model.addAttribute("wrongAnswers", quizService.getRandomWrongAnswers(id));
+        model.addAttribute("choices", quizService.getRandomChoices(id));
 
         return "quiz/quiz_detail";
     }

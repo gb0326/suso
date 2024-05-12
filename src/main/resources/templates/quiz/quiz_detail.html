@@ -14,15 +14,14 @@
 <h2>선택지 중 하나를 선택하세요</h2>
 <form action="/quiz/submit" method="post" th:csrf>
   <input type="hidden" name="quiz_id" th:value="${quiz.quiz_id}">
-  <input type="radio" id="choice1" name="choiceId" th:value="${quiz.sign.id}">
-  <label for="choice1" th:text="${quiz.sign.title}"></label>
-  <th:block th:each="wrongAnswer : ${wrongAnswers}">
-    <input type="radio" th:id="'choice' + ${wrongAnswer.id}" name="choiceId" th:value="${wrongAnswer.id}">
-    <label th:for="'choice' + ${wrongAnswer.id}" th:text="${wrongAnswer.title}"></label>
+  <th:block th:each="choice : ${choices}">
+    <input type="radio" th:id="'choice' + ${choice.id}" name="choiceId" th:value="${choice.id}">
+    <label th:for="'choice' + ${choice.id}" th:text="${choice.title}"></label>
     <br>
   </th:block>
   <input type="submit" value="선택 완료">
 </form>
+
 
 
 </body>

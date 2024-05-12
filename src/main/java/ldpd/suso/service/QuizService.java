@@ -21,7 +21,7 @@ public class QuizService {
     @Autowired
     private ResultRepository resultRepository;
 
-    public List<Sign> getRandomWrongAnswers(Integer id) {
+    public List<Sign> getRandomChoices(Integer id) {
         List<Sign> allSigns = signRepository.findAll(); //모든 수어 속성을 가져옴
         Quiz quiz = quizRepository.findById(id).orElse(null); //주어진 퀴즈를 가져옴
         if (quiz == null || quiz.getSign() == null) //퀴즈나 정답이 없는 경우
@@ -31,10 +31,23 @@ public class QuizService {
         List<Sign> wrongAnswers = new ArrayList<>(allSigns);
         wrongAnswers.remove(quiz.getSign()); //정답을 제거
 
-        //랜덤하게 3개의 오답을 선택
+        //랜덤하게 오답 선택지를 선택
         Collections.shuffle(wrongAnswers);
-        return wrongAnswers.subList(0, 3); //처음부터 3번째까지의 요소를 반환
+
+        //오답 중에서 2개 선택
+        List<Sign> randomChoices = wrongAnswers.subList(0, 3);
+
+        //정답을 추가하여 리스트 생성
+        List<Sign> choices = new ArrayList<>();
+        choices.add(quiz.getSign()); // 정답 추가
+        choices.addAll(randomChoices); // 오답 추가
+
+        //선택지를 랜덤하게 섞음
+        Collections.shuffle(choices);
+
+        return choices;
     }
+
 
     public void registerQuiz(Quiz quiz) throws Exception {
 
