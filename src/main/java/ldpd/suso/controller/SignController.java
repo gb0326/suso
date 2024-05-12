@@ -1,5 +1,6 @@
 package ldpd.suso.controller;
 
+import ldpd.suso.entity.Member;
 import ldpd.suso.entity.Quiz;
 import ldpd.suso.entity.Sign;
 import ldpd.suso.service.QuizService;

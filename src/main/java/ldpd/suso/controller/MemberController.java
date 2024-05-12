@@ -2,6 +2,7 @@ package ldpd.suso.controller;
 
 import jakarta.servlet.http.HttpSession;
 import ldpd.suso.entity.Member;
+import ldpd.suso.entity.Quiz;
 import ldpd.suso.repository.MemberRepository;
 import ldpd.suso.security.MemberCreateForm;
 import ldpd.suso.security.MemberSecurityService;
@@ -19,6 +20,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.List;
 
 
 @RequiredArgsConstructor

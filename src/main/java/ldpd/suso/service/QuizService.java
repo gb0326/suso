@@ -1,8 +1,10 @@
 package ldpd.suso.service;
 
 import ldpd.suso.entity.Quiz;
+import ldpd.suso.entity.Result;
 import ldpd.suso.entity.Sign;
 import ldpd.suso.repository.QuizRepository;
+import ldpd.suso.repository.ResultRepository;
 import ldpd.suso.repository.SignRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,9 +16,10 @@ public class QuizService {
 
     @Autowired
     private QuizRepository quizRepository;
-
     @Autowired
     private SignRepository signRepository;
+    @Autowired
+    private ResultRepository resultRepository;
 
     public List<Sign> getRandomWrongAnswers(Integer id) {
         List<Sign> allSigns = signRepository.findAll(); //모든 수어 속성을 가져옴
@@ -38,11 +41,6 @@ public class QuizService {
         quizRepository.save(quiz);
     }
 
-    public void markQuizAsCorrect(Quiz quiz) {
-        quiz.setCorrect(true);
-        quizRepository.save(quiz);
-    }
-
     public void quizDelete(Integer id) {       //데이터베이스에서 CASCADE 제약조건으로 수어 테이블과 같이 삭제된다.
         quizRepository.deleteById(id);
     }
@@ -55,4 +53,7 @@ public class QuizService {
         return quizRepository.findById(id).get();
     }
 
+    public List<Result> getQuizResultsByUsername(String username) {
+        return resultRepository.findByMemberUsername(username);
+    }
 }
